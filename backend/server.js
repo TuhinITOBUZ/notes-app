@@ -6,12 +6,12 @@ import cors from "cors";
 const taskSchema = new mongoose.Schema({
   heading: {
     type: String,
-    // require: true,
+    require: true,
 
   },
   details: {
     type: String,
-    // require: true,
+    require: true,
   },
 });
 
@@ -46,23 +46,25 @@ db.once("open", function () {
   console.log("Connected successfully");
 });
 
-app.post("form_data", async (request, response) => {
-  try {
-    console.log(JSON.stringify(request))
-  }
-  catch (err) {
-    console.log(err)
-  }
-})
 
 //add data to the collection
 app.post("/add_task", async (request, response) => {
   const task = new taskModel(request.body);
   try {
     await task.save();
-    response.send(task);
+    response.send({
+      data: task,
+      message: "task added",
+      status: 200,
+      success: true,
+    });
   } catch (error) {
-    response.status(500).send(error);
+    response.send({
+      data: null,
+      message: error,
+      status: 400,
+      success: false
+    })
   }
 });
 
@@ -71,18 +73,27 @@ app.put("/modify_task", async (request, response) => {
   const task = new taskModel(request.body);
   try {
     const doc = await taskModel.findOneAndUpdate(
-      { heading: request.body.heading },
+      { _id: request.body._id },
       {
         $set: {
-          heading: request.body.newheading,
-          details: request.body.newdetails,
+          heading: request.body.heading,
+          details: request.body.details,
         }
       }
     )
-    console.log(doc)
-    response.send(task);
+    response.send({
+      data: task,
+      message: "task updated",
+      status: 200,
+      success: true
+    });
   } catch (error) {
-    response.status(500).send(error);
+    response.send({
+      data: null,
+      message: error,
+      status: 400,
+      success: false,
+    })
   }
 })
 
@@ -90,11 +101,21 @@ app.put("/modify_task", async (request, response) => {
 app.delete("/delete_task", async (request, response) => {
   const task = new taskModel(request.body);
   try {
-    await taskModel.findOneAndDelete({ heading: request.body.heading })
-    response.send(task);
+    await taskModel.findOneAndDelete({ _id: request.body._id })
+    response.send({
+      data: task,
+      message: "task deleted",
+      status: 200,
+      success: true,
+    });
   }
   catch (error) {
-    console.log(error);
+    response.send({
+      data: null,
+      message: error,
+      status: 400,
+      success: false,
+    })
   }
 })
 
@@ -102,9 +123,19 @@ app.delete("/delete_task", async (request, response) => {
 app.get("/tasks", async (request, response) => {
   const tasks = await taskModel.find({});
   try {
-    response.send(tasks);
+    response.send({
+      data: tasks,
+      message: "All tasks",
+      status: 200,
+      success: true
+    });
   } catch (error) {
-    response.status(500).send(error);
+    response.send({
+      data: null,
+      message: error,
+      status: 400,
+      success: false
+    })
   }
 });
 

@@ -1,0 +1,137 @@
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  min-height: 100vh;
+  background-color: #FFEFD5;
+}
+
+.width-85 {
+  width: 85%;
+}
+
+.create-button {
+  z-index: 999999;
+  right: .2rem;
+  bottom: 2rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.create-button>i:hover {
+  transition: all .4s ease-in-out;
+  transform: rotate(120deg);
+}
+
+.close-button {
+  cursor: pointer;
+}
+
+.close-button:hover {
+  scale: 1.2;
+}
+
+.notes-body {
+  display: flex;
+}
+
+.create-task,
+.update-task {
+  display: none;
+  z-index: 999999;
+  min-height: 50vh;
+  min-width: 50vw;
+  top: 10vh;
+  background-color: aliceblue;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+
+.create-task>form>div>input,
+.update-task>form>div>input {
+  border: none;
+  border-radius: 10px;
+  font-size: large;
+  padding: 1rem;
+}
+
+.create-task>form>div>textarea,
+.update-task>form>div>textarea {
+  min-height: 20vh;
+  border: none;
+  border-radius: 10px;
+  font-size: small;
+  padding: 1rem;
+}
+
+.create-task>form>button,
+.update-task>form>button {
+  outline: none;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 3px;
+  padding: 12px 24px;
+  border: 0;
+  color: #000021;
+  background: #1de9b6;
+  line-height: 1.15;
+  font-size: 20px;
+}
+
+.create-task>form>button:hover,
+.update-task>form>button:hover {
+  transition: all .1s ease;
+  box-shadow: 0 0 0 0 #fff, 0 0 0 3px #1de9b6;
+}
+
+.task {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 1rem;
+  min-width: 15rem;
+}
+
+.task>h2 {
+  font-family: 'Pacifico', cursive;
+}
+
+.task>p {
+  max-height: 40vh;
+  overflow: auto;
+  text-align: justify;
+  font-family: 'Crimson Text', serif;
+}
+
+.task:hover {
+  transition: all .2s ease-in-out;
+  background-color: azure;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+  border: none;
+  scale: 1.1;
+}
+
+.delete-button:hover,
+.edit-button:hover {
+  scale: 1.3;
+}
+
+#task-list {
+  max-height: 80vh;
+  overflow: auto;
+}
+
+@media screen and (min-width:375px) {
+  .task {
+    min-width: 17rem;
+  }
+}
+
+@media screen and (min-width:900px) {
+  .task>p {
+    max-height: 15vh;
+    overflow: auto;
+    text-align: justify;
+    font-size: 1.3rem;
+  }
+}
