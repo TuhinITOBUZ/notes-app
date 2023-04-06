@@ -93,7 +93,7 @@ body {
 }
 
 .task>h2 {
-  font-family: 'Pacifico', cursive;
+  font-family: 'Roboto', sans-serif;
 }
 
 .task>p {
@@ -101,6 +101,7 @@ body {
   overflow: auto;
   text-align: justify;
   font-family: 'Crimson Text', serif;
+  font-family: 'Quicksand', sans-serif;
 }
 
 .task:hover {
@@ -121,6 +122,61 @@ body {
   overflow: auto;
 }
 
+.add-note-toast-message,
+.update-note-toast-message,
+.delete-note-toast-message {
+  display: none;
+  z-index: 999999;
+  background-color: aqua;
+  width: 70vw;
+  position: absolute;
+  right: 1.5rem;
+  top: 1.5rem;
+  transition: all .3s ease-in-out;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 60px 40px -7px;
+  cursor: pointer;
+  animation: fadeOut 4s;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.add-note-toast-message>p,
+.update-note-toast-message>p,
+.delete-note-toast-message>p {
+  padding: .75rem 0 0 0;
+}
+
+.check-box {
+  backdrop-filter: blur(10px);
+  display: none;
+  cursor: pointer;
+  z-index: 999999;
+  width: 100%;
+  height: 100%;
+}
+
+.check-box button {
+  padding: 1rem;
+  border: none;
+}
+
+.check-box button:hover {
+  transition: all .1s ease-in-out;
+  background-color: #1de9b6;
+  color: white;
+  scale: 1.1;
+  border-radius: 10px;
+}
+
 @media screen and (min-width:375px) {
   .task {
     min-width: 17rem;
@@ -128,6 +184,12 @@ body {
 }
 
 @media screen and (min-width:900px) {
+
+  .add-note-toast-message,
+  .update-note-toast-message,
+  .delete-note-toast-message {
+    width: 20vw;
+  }
 
   .create-button {
     right: 1rem;

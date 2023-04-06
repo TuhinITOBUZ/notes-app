@@ -12,14 +12,40 @@
   <link rel="stylesheet" href="/styles/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap" rel="stylesheet">
 </head>
 
 <body class="position-relative">
 
   <div id="create-button" class="create-button position-absolute display-1" onclick="createTask()">
     <i class="fa-solid fa-plus"></i>
+  </div>
+
+  <div id="add-note-toast-message"
+    class="add-note-toast-message flex-row gap-3 justify-content-center align-items-center">
+    <p class="fs-5">New note added</p>
+    <i class="fas fa-close p-3 close fs-3"></i>
+  </div>
+
+  <div id="update-note-toast-message"
+    class="update-note-toast-message flex-row gap-3 justify-content-center align-items-center">
+    <p class="fs-5">Note updated</p>
+    <i class="fas fa-close p-3 close fs-3"></i>
+  </div>
+
+  <div id="delete-note-toast-message"
+    class="delete-note-toast-message flex-row gap-3 justify-content-center align-items-center">
+    <p class="fs-5">Note deleted</p>
+    <i class="fas fa-close p-3 close fs-3"></i>
+  </div>
+
+  <div id="check-box" class="check-box flex-column position-absolute justify-content-center align-items-center p-5">
+    <h4 class="text-center">Confirm delete note?</h4>
+    <div class="d-flex flex-row justify-content-center align-items-center gap-4">
+      <button onclick="yesDeleteTask()" class="yes-delete-button">YES</button>
+      <button onclick="notDeleteTask()" class="no-delete-button">NO</button>
+    </div>
   </div>
 
   <div class="container-fluid notes-body flex-column justify-content-center align-items-center position-relative">
@@ -31,10 +57,11 @@
           class="fa-sharp fa-solid fa-square-xmark fs-1 p-2"></i></div>
       <form onsubmit="handleOnSubmitCreate(event)" class="d-flex flex-column align-items-center w-100 py-5">
         <div class="p-2 m-2 d-flex flex-column justify-content-center align-items-center gap-3 w-100">
+          <h2>Add Note</h2>
           <input id="task-heading" type="text" class="w-100 text-center" placeholder="heading...">
           <textarea id="task-details" class="w-100" type="text" placeholder="type your note here..."></textarea>
         </div>
-        <button class="form-button" type="submit">Save</button>
+        <button id="add-note-button" class="form-button" type="submit">Save</button>
       </form>
     </div>
 
@@ -42,11 +69,12 @@
       <div onclick="closeUpdateForm()" class="close-button position-absolute top-0 end-0"><i
           class="fa-sharp fa-solid fa-square-xmark fs-1 p-2"></i></div>
       <form onsubmit="handleOnSubmitUpdate(event)" class="d-flex flex-column align-items-center w-100 py-5">
+        <h2>Update Note</h2>
         <div class="p-2 m-2 d-flex flex-column justify-content-center align-items-center gap-3 w-100">
           <input id="update-task-heading" type="text" class="w-100  text-center" placeholder="heading...">
           <textarea id="update-task-details" class="w-100" type="text" placeholder="type your note here..."></textarea>
         </div>
-        <button class="form-button" type="submit">Save</button>
+        <button id="update-note-button" class="form-button" type="submit">Update</button>
       </form>
     </div>
 

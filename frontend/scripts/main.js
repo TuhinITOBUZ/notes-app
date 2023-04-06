@@ -7,6 +7,32 @@ const createTaskDiv = document.getElementById("create-task")
 const updateTaskDiv = document.getElementById("update-task")
 const colorArray = ['#82CAFF', '#CCFFFF', '#E6E6FA', '#77BFC7', '#3EB489', '#54C571', '#ECC5C0']
 let updateId = ""
+let deleteId = ""
+const addNoteButton = document.getElementById("add-note-button");
+const updateNoteButton = document.getElementById("update-note-button");
+const closeBtns = document.querySelectorAll(".close");
+
+addNoteButton.addEventListener("click", () => {
+  document.getElementById("add-note-toast-message").style.display = "flex"
+  setTimeout(() => {
+    document.getElementById("add-note-toast-message").style.display = "none"
+  }, 4000)
+})
+
+updateNoteButton.addEventListener("click", () => {
+  document.getElementById("update-note-toast-message").style.display = "flex"
+  setTimeout(() => {
+    document.getElementById("update-note-toast-message").style.display = "none"
+  }, 4000)
+})
+
+closeBtns.forEach(button => {
+  button.addEventListener("click", () => {
+    document.getElementById("add-note-toast-message").style.display = "none"
+    document.getElementById("update-note-toast-message").style.display = "none"
+    document.getElementById("delete-note-toast-message").style.display = "none"
+  })
+})
 
 function createTask() {
   createTaskDiv.style.display = "flex"
@@ -95,7 +121,7 @@ async function getTasks() {
       <h2 class="w-75">${response.data[i].heading}</h2>
       <p>${response.data[i].details}</p>
       <div class="position-absolute top-0 end-0">
-        <button onclick="deleteTask('${response.data[i]._id}')" class="delete-button p-1 m-1 border-0 bg-transparent"><i class="fa-solid fa-trash"></i></button>
+        <button onclick="confirmDeleteTask('${response.data[i]._id}')" class="delete-button p-1 m-1 border-0 bg-transparent"><i class="fa-solid fa-trash"></i></button>
         <button onclick="editTask('${response.data[i]._id}', '${response.data[i].heading}', '${response.data[i].details}')" class="edit-button p-1 m-1 border-0 bg-transparent"><i class="fa-regular fa-pen-to-square"></i></button>
       </div>
       </div>
@@ -108,6 +134,11 @@ async function getTasks() {
 getTasks()
 
 async function deleteTask(id) {
+  document.getElementById("check-box").style.display = "none"
+  document.getElementById("delete-note-toast-message").style.display = "flex"
+  setTimeout(() => {
+    document.getElementById("delete-note-toast-message").style.display = "none"
+  }, 4000)
   await fetch("http://localhost:3000/delete_task", {
     method: "DELETE",
     mode: 'cors',
@@ -122,6 +153,20 @@ async function deleteTask(id) {
   }).catch(error => {
     console.log(error);
   });
+}
+
+function confirmDeleteTask(id) {
+  deleteId = id
+  document.getElementById("check-box").style.display = "flex"
+}
+
+function yesDeleteTask() {
+  deleteTask(deleteId)
+}
+
+function notDeleteTask() {
+  deleteId = ""
+  document.getElementById("check-box").style.display = "none"
 }
 
 async function editTask(id, heading, details) {
