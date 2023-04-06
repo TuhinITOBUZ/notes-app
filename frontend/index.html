@@ -26,27 +26,27 @@
 
     <h1 class="p-4">Notes App</h1>
 
-    <div id="create-task" class="create-task position-absolute p-2 justify-content-center align-items-center">
+    <div id="create-task" class="create-task position-absolute p-2 ">
       <div onclick="closeCreateForm()" class="close-button position-absolute top-0 end-0"><i
           class="fa-sharp fa-solid fa-square-xmark fs-1 p-2"></i></div>
-      <form onsubmit="handleOnSubmitCreate(event)" class="d-flex flex-column align-items-center w-100">
+      <form onsubmit="handleOnSubmitCreate(event)" class="d-flex flex-column align-items-center w-100 py-5">
         <div class="p-2 m-2 d-flex flex-column justify-content-center align-items-center gap-3 w-100">
           <input id="task-heading" type="text" class="w-100 text-center" placeholder="heading...">
           <textarea id="task-details" class="w-100" type="text" placeholder="type your note here..."></textarea>
         </div>
-        <button class="form-button p-2 m-2" type="submit">Save</button>
+        <button class="form-button" type="submit">Save</button>
       </form>
     </div>
 
     <div id="update-task" class="update-task position-absolute p-2 justify-content-center align-items-center">
       <div onclick="closeUpdateForm()" class="close-button position-absolute top-0 end-0"><i
           class="fa-sharp fa-solid fa-square-xmark fs-1 p-2"></i></div>
-      <form onsubmit="handleOnSubmitUpdate(event)" class="d-flex flex-column align-items-center w-100">
+      <form onsubmit="handleOnSubmitUpdate(event)" class="d-flex flex-column align-items-center w-100 py-5">
         <div class="p-2 m-2 d-flex flex-column justify-content-center align-items-center gap-3 w-100">
           <input id="update-task-heading" type="text" class="w-100  text-center" placeholder="heading...">
           <textarea id="update-task-details" class="w-100" type="text" placeholder="type your note here..."></textarea>
         </div>
-        <button class="form-button p-2 m-2" type="submit">Save</button>
+        <button class="form-button" type="submit">Save</button>
       </form>
     </div>
 
