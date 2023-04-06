@@ -23,7 +23,6 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-
 const username = "tuhin";
 const password = "O4E0h0lSaghN0AwG";
 const cluster = "notescluster.jwpxl2v";
@@ -45,7 +44,6 @@ db.on("error", error => {
 db.once("open", function () {
   console.log("Connected successfully");
 });
-
 
 //add data to the collection
 app.post("/add_task", async (request, response) => {
