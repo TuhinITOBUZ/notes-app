@@ -18,7 +18,7 @@
 
 <body class="position-relative overflow-hidden">
 
-  <div class="create-button position-absolute display-1" onclick="createTask()">
+  <div class="create-button position-absolute display-1 create-button-load-effect" onclick="createTask()">
     <i class="fa-solid fa-plus"></i>
   </div>
 
@@ -40,7 +40,7 @@
   </div>
 
   <div id="checkBox" class="check-box flex-column position-absolute justify-content-center align-items-center p-5">
-    <h4 class="text-center">Confirm delete note?</h4>
+    <h4 class="text-center text-danger display-6 fw-bold">Confirm delete note?</h4>
     <div class="d-flex flex-row justify-content-center align-items-center gap-4">
       <button onclick="yesDeleteTask()" class="yes-delete-button">YES</button>
       <button onclick="notDeleteTask()" class="no-delete-button">NO</button>
@@ -49,7 +49,7 @@
 
   <div class="container-fluid notes-body flex-column justify-content-center align-items-center position-relative">
 
-    <h1 id="notesHeading" class="p-4">Notes app</h1>
+    <h1 id="notesHeading" class="p-4 display-1">My Notes</h1>
     <p id="notesSubHeading"></p>
 
     <div id="viewTask" class="view-task position-absolute p-2 flex-column">
@@ -71,7 +71,7 @@
         </div>
         <button id="addNoteButton" class="form-button" type="submit">Save</button>
       </form>
-      <button id="clearNoteButton" class="m-2" type="text">Clear</button>
+      <button class="clear-note-button m-2" type="text">Clear</button>
     </div>
 
     <div id="update-task-id"
@@ -86,7 +86,7 @@
         </div>
         <button id="updateNoteButton" class="form-button" type="submit">Update</button>
       </form>
-      <button id="clearNoteButton" class="m-2" type="text">Clear</button>
+      <button class="clear-note-button m-2" type="text">Clear</button>
     </div>
 
     <div id="taskList"

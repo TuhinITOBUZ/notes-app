@@ -18,12 +18,20 @@ closeBtns.forEach(button => {
   })
 })
 
-document.getElementById("clearNoteButton").addEventListener("click", () => {
-  updateTaskHeading.value = ""
-  taskHeading.value = ""
-  updateTaskDetails.value = ""
-  taskDetails.value = ""
+document.querySelectorAll(".clear-note-button").forEach(button => {
+  button.addEventListener("click", () => {
+    updateTaskHeading.value = ""
+    taskHeading.value = ""
+    updateTaskDetails.value = ""
+    taskDetails.value = ""
+  })
 })
+
+function setTaskBackgroundColor() {
+  document.querySelectorAll(".task").forEach((task, index) => {
+    task.style.backgroundColor = colorArray[index % 4]
+  })
+}
 
 function createTask() {
   createTaskDiv.style.display = "flex"
@@ -64,12 +72,6 @@ async function editTask(id, heading, details) {
   updateTaskHeading.value = heading;
   updateTaskDetails.value = details;
   updateId = id
-}
-
-function setTaskBackgroundColor() {
-  document.querySelectorAll(".task").forEach((task, index) => {
-    task.style.backgroundColor = colorArray[index % 4]
-  })
 }
 
 function viewTask(heading, details) {
@@ -129,9 +131,6 @@ async function handleOnSubmitCreate(event) {
       getTasks()
     })
   }
-  else {
-    alert("Heading or details is missing")
-  }
 }
 
 async function handleOnSubmitUpdate(event) {
@@ -174,12 +173,12 @@ async function getTasks() {
     for (let i = 0; i < response.data.length; i++) {
       let task = `
       <div class="task p-2 position-relative">
-      <h2 class="w-75">${response.data[i].heading}</h2>
-      <p>${response.data[i].details}</p>
-      <div class="position-absolute top-0 end-0">
-        <button onclick="viewTask('${response.data[i].heading}', '${response.data[i].details}')" class="view-button p-1 m-1 border-0 bg-transparent"><i class="fa-regular fa-eye"></i></button>
-        <button onclick="confirmDeleteTask('${response.data[i]._id}')" class="delete-button p-1 m-1 border-0 bg-transparent"><i class="fa-solid fa-trash"></i></button>
-        <button onclick="editTask('${response.data[i]._id}', '${response.data[i].heading}', '${response.data[i].details}')" class="edit-button p-1 m-1 border-0 bg-transparent"><i class="fa-regular fa-pen-to-square"></i></button>
+      <h2 class="w-75 overflow-auto">${response.data[i].heading}</h2>
+      <p class="width-85">${response.data[i].details}</p>
+      <div class="position-absolute top-0 end-0 d-flex flex-column gap-2 p-1">
+        <button onclick="viewTask('${response.data[i].heading}', '${response.data[i].details}')" class="view-button border-0 bg-transparent"><i class="fa-regular fa-eye"></i></button>
+        <button onclick="editTask('${response.data[i]._id}', '${response.data[i].heading}', '${response.data[i].details}')" class="edit-button border-0 bg-transparent"><i class="fa-regular fa-pen-to-square"></i></button>
+        <button onclick="confirmDeleteTask('${response.data[i]._id}')" class="delete-button border-0 bg-transparent"><i class="fa-solid fa-trash"></i></button>
       </div>
       </div>
       `

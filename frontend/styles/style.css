@@ -11,7 +11,7 @@ body {
 }
 
 .create-button {
-  z-index: 999999;
+  z-index: 1;
   right: .2rem;
   bottom: 2rem;
   border-radius: 50%;
@@ -39,7 +39,7 @@ body {
 .update-task,
 .view-task {
   display: none;
-  z-index: 999999;
+  z-index: 1;
   width: 100%;
   min-height: 90vh;
   top: 10vh;
@@ -95,6 +95,7 @@ body {
   border-radius: 10px;
   padding: 1rem;
   min-width: 15rem;
+  min-height: 7rem;
 }
 
 .task>h2 {
@@ -132,7 +133,7 @@ body {
 .update-note-toast-message,
 .delete-note-toast-message {
   display: none;
-  z-index: 999999;
+  z-index: 1;
   background-color: #00f5d4;
   width: 70vw;
   position: absolute;
@@ -167,7 +168,7 @@ body {
   backdrop-filter: blur(10px);
   display: none;
   cursor: pointer;
-  z-index: 999999;
+  z-index: 1;
   width: 100%;
   height: 100%;
 }
@@ -179,10 +180,38 @@ body {
 
 .check-box button:hover {
   transition: all .1s ease-in-out;
-  background-color: #1de9b6;
-  color: white;
+  background-color: #ccd5ae;
+  /* color: white; */
   scale: 1.1;
   border-radius: 10px;
+}
+
+.create-button-load-effect {
+  transform-origin: 50% 50%;
+  animation: shake 1s ease;
+}
+
+@keyframes shake {
+  30% {
+    transform: scale(1.2);
+  }
+
+  40%,
+  60% {
+    transform: rotate(-20deg) scale(1.2);
+  }
+
+  50% {
+    transform: rotate(20deg) scale(1.2);
+  }
+
+  70% {
+    transform: rotate(0deg) scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 @media screen and (min-width:375px) {
