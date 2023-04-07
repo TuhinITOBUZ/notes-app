@@ -20,10 +20,7 @@ closeBtns.forEach(button => {
 
 document.querySelectorAll(".clear-note-button").forEach(button => {
   button.addEventListener("click", () => {
-    updateTaskHeading.value = ""
-    taskHeading.value = ""
-    updateTaskDetails.value = ""
-    taskDetails.value = ""
+    updateTaskHeading.value = taskHeading.value = updateTaskDetails.value = taskDetails.value = "";
   })
 })
 
@@ -83,13 +80,7 @@ function viewTask(heading, details) {
 async function performBackendOperation(path, method, bodyDetails) {
   let url = `http://localhost:3000/${path}`
   if (method === "GET") {
-    const response = await fetch(url, {
-      method: "GET",
-      mode: 'cors',
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    }).then(function (res) {
+    const response = await fetch(url).then(function (res) {
       return res.json()
     }).catch((err) => {
       console.log(err);
