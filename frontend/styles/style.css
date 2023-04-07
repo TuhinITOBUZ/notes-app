@@ -36,7 +36,8 @@ body {
 }
 
 .create-task,
-.update-task {
+.update-task,
+.view-task {
   display: none;
   z-index: 999999;
   width: 100%;
@@ -64,8 +65,10 @@ body {
   padding: 1rem;
 }
 
-.create-task>form>button,
-.update-task>form>button {
+.create-task>form button,
+.update-task>form button,
+.create-task button,
+.update-task button {
   outline: none;
   cursor: pointer;
   font-weight: 600;
@@ -73,15 +76,17 @@ body {
   padding: 12px 24px;
   border: 0;
   color: #000021;
-  background: #1de9b6;
+  background: #d4a373;
   line-height: 1.15;
   font-size: 20px;
 }
 
-.create-task>form>button:hover,
-.update-task>form>button:hover {
+.create-task>form button:hover,
+.update-task>form button:hover,
+.create-task button:hover,
+.update-task button:hover {
   transition: all .2s ease;
-  background: violet;
+  background: #ccd5ae;
   scale: 1.1;
 }
 
@@ -108,12 +113,13 @@ body {
 .task:hover {
   transition: all .3s ease-in-out;
   box-shadow: inset 200px 0 0 0 #54b3d6;
-  color: white;
   cursor: pointer;
+  border: none;
 }
 
 .delete-button:hover,
-.edit-button:hover {
+.edit-button:hover,
+.view-button:hover {
   scale: 1.3;
 }
 

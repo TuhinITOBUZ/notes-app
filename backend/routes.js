@@ -79,7 +79,7 @@ app.delete("/delete_task", async (request, response) => {
 
 //read data from the collection
 app.get("/tasks", async (request, response) => {
-  const tasks = await taskModel.find({});
+  const tasks = await taskModel.find();
   try {
     response.send({
       data: tasks,
@@ -96,5 +96,3 @@ app.get("/tasks", async (request, response) => {
     })
   }
 });
-
-// export default app;

@@ -6,25 +6,9 @@ const taskList = document.getElementById("taskList")
 const createTaskDiv = document.getElementById("createTask")
 const updateTaskDiv = document.getElementById("update-task-id")
 const colorArray = ['#ccd5ae', '#e9edc9', '#faedcd', '#d4a373']
-const addNoteButton = document.getElementById("addNoteButton");
-const updateNoteButton = document.getElementById("updateNoteButton");
 const closeBtns = document.querySelectorAll(".close");
 let updateId = ""
 let deleteId = ""
-
-addNoteButton.addEventListener("click", () => {
-  document.getElementById("addNoteToastMessage").style.display = "flex"
-  setTimeout(() => {
-    document.getElementById("addNoteToastMessage").style.display = "none"
-  }, 4000)
-})
-
-updateNoteButton.addEventListener("click", () => {
-  document.getElementById("updateNoteToastMessage").style.display = "flex"
-  setTimeout(() => {
-    document.getElementById("updateNoteToastMessage").style.display = "none"
-  }, 4000)
-})
 
 closeBtns.forEach(button => {
   button.addEventListener("click", () => {
@@ -34,8 +18,19 @@ closeBtns.forEach(button => {
   })
 })
 
+document.getElementById("clearNoteButton").addEventListener("click", () => {
+  updateTaskHeading.value = ""
+  taskHeading.value = ""
+  updateTaskDetails.value = ""
+  taskDetails.value = ""
+})
+
 function createTask() {
   createTaskDiv.style.display = "flex"
+}
+
+function closeView() {
+  document.getElementById("viewTask").style.display = "none"
 }
 
 function closeCreateForm() {
@@ -77,9 +72,16 @@ function setTaskBackgroundColor() {
   })
 }
 
+function viewTask(heading, details) {
+  document.getElementById("viewTask").style.display = "flex"
+  document.getElementById("viewTaskHeading").innerHTML = heading
+  document.getElementById("viewTaskDetails").innerHTML = details
+}
+
 async function performBackendOperation(path, method, bodyDetails) {
+  let url = `http://localhost:3000/${path}`
   if (method === "GET") {
-    const response = await fetch(`http://localhost:3000/${path}`, {
+    const response = await fetch(url, {
       method: "GET",
       mode: 'cors',
       headers: {
@@ -93,7 +95,7 @@ async function performBackendOperation(path, method, bodyDetails) {
     return response
   }
   else {
-    const response = await fetch(`http://localhost:3000/${path}`, {
+    const response = await fetch(url, {
       method: method,
       mode: 'cors',
       headers: {
@@ -116,11 +118,16 @@ async function handleOnSubmitCreate(event) {
       heading: taskHeading.value,
       details: taskDetails.value,
     }
-    await performBackendOperation("add_task", "POST", bodyDetails)
-    taskDetails.value = null;
-    taskHeading.value = null;
-    createTaskDiv.style.display = "none"
-    getTasks()
+    await performBackendOperation("add_task", "POST", bodyDetails).then(() => {
+      taskDetails.value = null;
+      taskHeading.value = null;
+      createTaskDiv.style.display = "none"
+      document.getElementById("addNoteToastMessage").style.display = "flex"
+      setTimeout(() => {
+        document.getElementById("addNoteToastMessage").style.display = "none"
+      }, 4000)
+      getTasks()
+    })
   }
   else {
     alert("Heading or details is missing")
@@ -135,7 +142,12 @@ async function handleOnSubmitUpdate(event) {
       heading: updateTaskHeading.value,
       details: updateTaskDetails.value,
     }
-    await performBackendOperation("modify_task", "PUT", bodyDetails)
+    await performBackendOperation("modify_task", "PUT", bodyDetails).then(() => {
+      document.getElementById("updateNoteToastMessage").style.display = "flex"
+      setTimeout(() => {
+        document.getElementById("updateNoteToastMessage").style.display = "none"
+      }, 4000)
+    })
     updateTaskDiv.style.display = "none"
     getTasks()
   }
@@ -150,6 +162,14 @@ async function getTasks() {
     console.log(response.error.message);
   }
   else {
+    if (response.data.length > 0) {
+      document.getElementById("notesSubHeading").display = "block"
+      document.getElementById("notesSubHeading").innerHTML = `${response.data.length} Notes`
+    }
+    else {
+      document.getElementById("notesSubHeading").display = "none"
+      document.getElementById("notesSubHeading").innerHTML = ""
+    }
     taskList.innerHTML = ""
     for (let i = 0; i < response.data.length; i++) {
       let task = `
@@ -157,6 +177,7 @@ async function getTasks() {
       <h2 class="w-75">${response.data[i].heading}</h2>
       <p>${response.data[i].details}</p>
       <div class="position-absolute top-0 end-0">
+        <button onclick="viewTask('${response.data[i].heading}', '${response.data[i].details}')" class="view-button p-1 m-1 border-0 bg-transparent"><i class="fa-regular fa-eye"></i></button>
         <button onclick="confirmDeleteTask('${response.data[i]._id}')" class="delete-button p-1 m-1 border-0 bg-transparent"><i class="fa-solid fa-trash"></i></button>
         <button onclick="editTask('${response.data[i]._id}', '${response.data[i].heading}', '${response.data[i].details}')" class="edit-button p-1 m-1 border-0 bg-transparent"><i class="fa-regular fa-pen-to-square"></i></button>
       </div>
@@ -171,11 +192,12 @@ getTasks()
 
 async function deleteTask(id) {
   document.getElementById("checkBox").style.display = "none"
-  document.getElementById("deleteNoteToastMessage").style.display = "flex"
-  setTimeout(() => {
-    document.getElementById("deleteNoteToastMessage").style.display = "none"
-  }, 4000)
   const bodyDetails = { _id: id }
-  await performBackendOperation("delete_task", "DELETE", bodyDetails)
+  await performBackendOperation("delete_task", "DELETE", bodyDetails).then(() => {
+    document.getElementById("deleteNoteToastMessage").style.display = "flex"
+    setTimeout(() => {
+      document.getElementById("deleteNoteToastMessage").style.display = "none"
+    }, 4000)
+  })
   getTasks()
 }

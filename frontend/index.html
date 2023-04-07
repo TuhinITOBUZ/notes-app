@@ -49,12 +49,21 @@
 
   <div class="container-fluid notes-body flex-column justify-content-center align-items-center position-relative">
 
-    <h1 class="p-4">Notes App</h1>
+    <h1 id="notesHeading" class="p-4">Notes app</h1>
+    <p id="notesSubHeading"></p>
 
-    <div id="createTask" class="create-task position-absolute p-2 ">
+    <div id="viewTask" class="view-task position-absolute p-2 flex-column">
+      <div onclick="closeView()" class="close-button position-absolute top-0 end-0"><i
+          class="fa-sharp fa-solid fa-square-xmark fs-1 p-2"></i></div>
+      <h2 id="viewTaskHeading" class="p-4">demo text</h2>
+      <p id="viewTaskDetails" class="p-4"> demo para</p>
+    </div>
+
+    <div id="createTask"
+      class="create-task position-absolute p-2 flex-column justify-content-center align-items-center">
       <div onclick="closeCreateForm()" class="close-button position-absolute top-0 end-0"><i
           class="fa-sharp fa-solid fa-square-xmark fs-1 p-2"></i></div>
-      <form onsubmit="handleOnSubmitCreate(event)" class="d-flex flex-column align-items-center w-100 py-5">
+      <form onsubmit="handleOnSubmitCreate(event)" class="d-flex flex-column align-items-center w-100">
         <div class="p-2 m-2 d-flex flex-column justify-content-center align-items-center gap-3 w-100">
           <h2>Add Note</h2>
           <input id="taskHeading" type="text" class="w-100 text-center" placeholder="heading...">
@@ -62,12 +71,14 @@
         </div>
         <button id="addNoteButton" class="form-button" type="submit">Save</button>
       </form>
+      <button id="clearNoteButton" class="m-2" type="text">Clear</button>
     </div>
 
-    <div id="update-task-id" class="update-task position-absolute p-2 justify-content-center align-items-center">
+    <div id="update-task-id"
+      class="update-task position-absolute p-2 flex-column justify-content-center align-items-center">
       <div onclick="closeUpdateForm()" class="close-button position-absolute top-0 end-0"><i
           class="fa-sharp fa-solid fa-square-xmark fs-1 p-2"></i></div>
-      <form onsubmit="handleOnSubmitUpdate(event)" class="d-flex flex-column align-items-center w-100 py-5">
+      <form onsubmit="handleOnSubmitUpdate(event)" class="d-flex flex-column align-items-center w-100">
         <h2>Update Note</h2>
         <div class="p-2 m-2 d-flex flex-column justify-content-center align-items-center gap-3 w-100">
           <input id="updateTaskHeading" type="text" class="w-100  text-center" placeholder="heading...">
@@ -75,11 +86,11 @@
         </div>
         <button id="updateNoteButton" class="form-button" type="submit">Update</button>
       </form>
+      <button id="clearNoteButton" class="m-2" type="text">Clear</button>
     </div>
 
     <div id="taskList"
       class="task-list width-85  d-flex flex-wrap gap-4 py-4 justify-content-center align-items-center">
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
