@@ -1,36 +1,36 @@
-const taskDetails = document.getElementById("task-details")
-const taskHeading = document.getElementById("task-heading")
-const updateTaskDetails = document.getElementById("update-task-details")
-const updateTaskHeading = document.getElementById("update-task-heading")
-const taskList = document.getElementById("task-list")
-const createTaskDiv = document.getElementById("create-task")
-const updateTaskDiv = document.getElementById("update-task")
-const colorArray = ['#82CAFF', '#CCFFFF', '#E6E6FA', '#77BFC7', '#3EB489', '#54C571', '#ECC5C0']
+const taskDetails = document.getElementById("taskDetails")
+const taskHeading = document.getElementById("taskHeading")
+const updateTaskDetails = document.getElementById("updateTaskDetails")
+const updateTaskHeading = document.getElementById("updateTaskHeading")
+const taskList = document.getElementById("taskList")
+const createTaskDiv = document.getElementById("createTask")
+const updateTaskDiv = document.getElementById("update-task-id")
+const colorArray = ['#ccd5ae', '#e9edc9', '#faedcd', '#d4a373']
+const addNoteButton = document.getElementById("addNoteButton");
+const updateNoteButton = document.getElementById("updateNoteButton");
+const closeBtns = document.querySelectorAll(".close");
 let updateId = ""
 let deleteId = ""
-const addNoteButton = document.getElementById("add-note-button");
-const updateNoteButton = document.getElementById("update-note-button");
-const closeBtns = document.querySelectorAll(".close");
 
 addNoteButton.addEventListener("click", () => {
-  document.getElementById("add-note-toast-message").style.display = "flex"
+  document.getElementById("addNoteToastMessage").style.display = "flex"
   setTimeout(() => {
-    document.getElementById("add-note-toast-message").style.display = "none"
+    document.getElementById("addNoteToastMessage").style.display = "none"
   }, 4000)
 })
 
 updateNoteButton.addEventListener("click", () => {
-  document.getElementById("update-note-toast-message").style.display = "flex"
+  document.getElementById("updateNoteToastMessage").style.display = "flex"
   setTimeout(() => {
-    document.getElementById("update-note-toast-message").style.display = "none"
+    document.getElementById("updateNoteToastMessage").style.display = "none"
   }, 4000)
 })
 
 closeBtns.forEach(button => {
   button.addEventListener("click", () => {
-    document.getElementById("add-note-toast-message").style.display = "none"
-    document.getElementById("update-note-toast-message").style.display = "none"
-    document.getElementById("delete-note-toast-message").style.display = "none"
+    document.getElementById("addNoteToastMessage").style.display = "none"
+    document.getElementById("updateNoteToastMessage").style.display = "none"
+    document.getElementById("deleteNoteToastMessage").style.display = "none"
   })
 })
 
@@ -50,25 +50,75 @@ function closeUpdateForm() {
   updateTaskDetails.value = "";
 }
 
-async function handleOnSubmitCreate(event) {
-  event.preventDefault()
-  if (taskHeading.value != "" && taskDetails.value != "") {
-    await fetch("http://localhost:3000/add_task", {
-      method: "POST",
+function confirmDeleteTask(id) {
+  deleteId = id
+  document.getElementById("checkBox").style.display = "flex"
+}
+
+function yesDeleteTask() {
+  deleteTask(deleteId)
+}
+
+function notDeleteTask() {
+  deleteId = ""
+  document.getElementById("checkBox").style.display = "none"
+}
+
+async function editTask(id, heading, details) {
+  updateTaskDiv.style.display = "flex"
+  updateTaskHeading.value = heading;
+  updateTaskDetails.value = details;
+  updateId = id
+}
+
+function setTaskBackgroundColor() {
+  document.querySelectorAll(".task").forEach((task, index) => {
+    task.style.backgroundColor = colorArray[index % 4]
+  })
+}
+
+async function performBackendOperation(path, method, bodyDetails) {
+  if (method === "GET") {
+    const response = await fetch(`http://localhost:3000/${path}`, {
+      method: "GET",
       mode: 'cors',
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
-      body: JSON.stringify({
-        heading: taskHeading.value,
-        details: taskDetails.value,
-      })
-    }).then(() => {
-      taskDetails.value = null;
-      taskHeading.value = null;
-    }).catch(error => {
-      console.log(error);
+    }).then(function (res) {
+      return res.json()
+    }).catch((err) => {
+      console.log(err);
     });
+    return response
+  }
+  else {
+    const response = await fetch(`http://localhost:3000/${path}`, {
+      method: method,
+      mode: 'cors',
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(bodyDetails)
+    }).then(function (res) {
+      return res.json()
+    }).catch((err) => {
+      console.log(err);
+    });
+    return response
+  }
+}
+
+async function handleOnSubmitCreate(event) {
+  event.preventDefault()
+  if (taskHeading.value != "" && taskDetails.value != "") {
+    const bodyDetails = {
+      heading: taskHeading.value,
+      details: taskDetails.value,
+    }
+    await performBackendOperation("add_task", "POST", bodyDetails)
+    taskDetails.value = null;
+    taskHeading.value = null;
     createTaskDiv.style.display = "none"
     getTasks()
   }
@@ -80,22 +130,12 @@ async function handleOnSubmitCreate(event) {
 async function handleOnSubmitUpdate(event) {
   event.preventDefault();
   if (updateTaskHeading.value != "" && updateTaskDetails.value != "") {
-    await fetch("http://localhost:3000/modify_task", {
-      method: "PUT",
-      mode: 'cors',
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-      body: JSON.stringify({
-        _id: updateId,
-        heading: updateTaskHeading.value,
-        details: updateTaskDetails.value,
-      })
-    }).then(() => {
-      getTasks()
-    }).catch(error => {
-      console.log(error);
-    });
+    const bodyDetails = {
+      _id: updateId,
+      heading: updateTaskHeading.value,
+      details: updateTaskDetails.value,
+    }
+    await performBackendOperation("modify_task", "PUT", bodyDetails)
     updateTaskDiv.style.display = "none"
     getTasks()
   }
@@ -105,11 +145,7 @@ async function handleOnSubmitUpdate(event) {
 }
 
 async function getTasks() {
-  const response = await fetch("http://localhost:3000/tasks").then(function (res) {
-    return res.json()
-  }).catch((err) => {
-    console.log(err);
-  });
+  const response = await performBackendOperation("tasks", "GET", {})
   if (response.error) {
     console.log(response.error.message);
   }
@@ -134,50 +170,12 @@ async function getTasks() {
 getTasks()
 
 async function deleteTask(id) {
-  document.getElementById("check-box").style.display = "none"
-  document.getElementById("delete-note-toast-message").style.display = "flex"
+  document.getElementById("checkBox").style.display = "none"
+  document.getElementById("deleteNoteToastMessage").style.display = "flex"
   setTimeout(() => {
-    document.getElementById("delete-note-toast-message").style.display = "none"
+    document.getElementById("deleteNoteToastMessage").style.display = "none"
   }, 4000)
-  await fetch("http://localhost:3000/delete_task", {
-    method: "DELETE",
-    mode: 'cors',
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify({
-      _id: id
-    })
-  }).then(() => {
-    getTasks()
-  }).catch(error => {
-    console.log(error);
-  });
-}
-
-function confirmDeleteTask(id) {
-  deleteId = id
-  document.getElementById("check-box").style.display = "flex"
-}
-
-function yesDeleteTask() {
-  deleteTask(deleteId)
-}
-
-function notDeleteTask() {
-  deleteId = ""
-  document.getElementById("check-box").style.display = "none"
-}
-
-async function editTask(id, heading, details) {
-  updateTaskDiv.style.display = "flex"
-  updateTaskHeading.value = heading;
-  updateTaskDetails.value = details;
-  updateId = id
-}
-
-function setTaskBackgroundColor() {
-  document.querySelectorAll(".task").forEach((task, index) => {
-    task.style.backgroundColor = colorArray[index % 7]
-  })
+  const bodyDetails = { _id: id }
+  await performBackendOperation("delete_task", "DELETE", bodyDetails)
+  getTasks()
 }

@@ -3,7 +3,7 @@ body {
   margin: 0;
   box-sizing: border-box;
   min-height: 100vh;
-  background-color: #FFEFD5;
+  background-color: #fefae0;
 }
 
 .width-85 {
@@ -49,7 +49,7 @@ body {
 
 .create-task>form>div>input,
 .update-task>form>div>input {
-  border: none;
+  border: 1px salmon double;
   border-radius: 10px;
   font-size: large;
   padding: 1rem;
@@ -98,18 +98,18 @@ body {
 
 .task>p {
   max-height: 40vh;
+  max-width: 15rem;
   overflow: auto;
   text-align: justify;
   font-family: 'Crimson Text', serif;
-  font-family: 'Quicksand', sans-serif;
+
 }
 
 .task:hover {
-  transition: all .2s ease-in-out;
-  background-color: azure;
+  transition: all .3s ease-in-out;
+  box-shadow: inset 200px 0 0 0 #54b3d6;
+  color: white;
   cursor: pointer;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
-  border: none;
 }
 
 .delete-button:hover,
@@ -117,7 +117,7 @@ body {
   scale: 1.3;
 }
 
-#task-list {
+.task-list {
   max-height: 80vh;
   overflow: auto;
 }
@@ -127,25 +127,27 @@ body {
 .delete-note-toast-message {
   display: none;
   z-index: 999999;
-  background-color: aqua;
+  background-color: #00f5d4;
   width: 70vw;
   position: absolute;
-  right: 1.5rem;
+  left: 25%;
   top: 1.5rem;
   transition: all .3s ease-in-out;
+  border-left: 10px solid #00bbf9;
+  border-bottom: 2px solid #00bbf9;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 60px 40px -7px;
   cursor: pointer;
-  animation: fadeOut 4s;
+  animation: slideIn 1s ease-in;
 }
 
-@keyframes fadeOut {
+@keyframes slideIn {
   0% {
-    opacity: 1;
+    left: 100%;
   }
 
   100% {
-    opacity: 0;
+    left: 25%;
   }
 }
 
@@ -188,7 +190,19 @@ body {
   .add-note-toast-message,
   .update-note-toast-message,
   .delete-note-toast-message {
+    left: 70%;
     width: 20vw;
+    animation: slideIn 1s ease-in;
+  }
+
+  @keyframes slideIn {
+    0% {
+      left: 100%;
+    }
+
+    100% {
+      left: 70%;
+    }
   }
 
   .create-button {
