@@ -1,9 +1,7 @@
 import express from "express"
 import { taskModel } from "./models.js";
-import cors from "cors";
 
 export const app = express();
-app.use(cors());
 
 //add data to the collection
 app.post("/add_task", async (request, response) => {
