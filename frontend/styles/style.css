@@ -117,9 +117,14 @@ body {
 }
 
 .task:hover {
+  opacity: 1;
   box-shadow: inset 200px 0 0 0 #54b3d6;
   cursor: pointer;
   border: none;
+}
+
+.task-list:hover>.task:not(:hover) {
+  opacity: .5;
 }
 
 .delete-button:hover,

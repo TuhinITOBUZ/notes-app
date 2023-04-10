@@ -1,7 +1,7 @@
 import express from "express"
 import cors from "cors";
 import * as routers from "./routes.js";
-import { db } from "./databaseConnection.js";
+import { database } from "./databaseConnection.js";
 import { port } from "./config.js";
 
 const app = express();
