@@ -4,36 +4,32 @@ import { taskModel } from "./models.js";
 export const app = express();
 
 //add data to the collection
-app.post("/add_task", async (request, response) => {
-  const task = new taskModel(request.body);
+app.post("/add_task", async (request, response, next) => {
   try {
+    const task = new taskModel(request.body);
     await task.save();
     response.send({
       data: task,
-      message: "task added",
+      message: "task added successfully",
       status: 200,
       success: true,
     });
   } catch (error) {
-    response.send({
-      data: null,
-      message: error.message,
-      status: 400,
-      success: false
-    })
+    next(error)
   }
 });
 
 //update data
-app.put("/modify_task", async (request, response) => {
-  const task = new taskModel(request.body);
+app.put("/modify_task", async (request, response, next) => {
   try {
-    const doc = await taskModel.findOneAndUpdate(
+    const task = new taskModel(request.body);
+    await taskModel.findOneAndUpdate(
       { _id: request.body._id },
       {
         $set: {
           heading: request.body.heading,
           details: request.body.details,
+          date: request.body.date,
         }
       }
     )
@@ -44,19 +40,14 @@ app.put("/modify_task", async (request, response) => {
       success: true
     });
   } catch (error) {
-    response.send({
-      data: null,
-      message: error.message,
-      status: 400,
-      success: false,
-    })
+    next(error)
   }
 })
 
 //delete data from database
-app.delete("/delete_task", async (request, response) => {
-  const task = new taskModel(request.body);
+app.delete("/delete_task", async (request, response, next) => {
   try {
+    const task = new taskModel(request.body);
     await taskModel.findOneAndDelete({ _id: request.body._id })
     response.send({
       data: task,
@@ -66,19 +57,14 @@ app.delete("/delete_task", async (request, response) => {
     });
   }
   catch (error) {
-    response.send({
-      data: null,
-      message: error.message,
-      status: 400,
-      success: false,
-    })
+    next(error)
   }
 })
 
 //read data from the collection
-app.get("/tasks", async (request, response) => {
-  const tasks = await taskModel.find();
+app.get("/tasks", async (request, response, next) => {
   try {
+    const tasks = await taskModel.find();
     response.send({
       data: tasks,
       message: "All tasks",
@@ -86,11 +72,6 @@ app.get("/tasks", async (request, response) => {
       success: true
     });
   } catch (error) {
-    response.send({
-      data: null,
-      message: error.message,
-      status: 400,
-      success: false
-    })
+    next(error)
   }
 });

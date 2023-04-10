@@ -10,6 +10,10 @@ const taskSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  date: {
+    type: String,
+    require: true,
+  },
 });
 
 export const taskModel = mongoose.model("task", taskSchema);

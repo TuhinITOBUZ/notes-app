@@ -1,24 +1,31 @@
-const taskDetails = document.getElementById("taskDetails")
-const taskHeading = document.getElementById("taskHeading")
-const updateTaskDetails = document.getElementById("updateTaskDetails")
-const updateTaskHeading = document.getElementById("updateTaskHeading")
-const taskList = document.getElementById("taskList")
-const createTaskDiv = document.getElementById("createTask")
-const updateTaskDiv = document.getElementById("update-task-id")
-const colorArray = ['#ccd5ae', '#e9edc9', '#faedcd', '#d4a373']
+const taskDetails = document.getElementById("taskDetails");
+const taskHeading = document.getElementById("taskHeading");
+const updateTaskDetails = document.getElementById("updateTaskDetails");
+const updateTaskHeading = document.getElementById("updateTaskHeading");
+const taskList = document.getElementById("taskList");
+const createTaskDiv = document.getElementById("createTask");
+const updateTaskDiv = document.getElementById("updateTask");
+const addNoteToastMessage = document.getElementById("addNoteToastMessage")
+const updateNoteToastMessage = document.getElementById("updateNoteToastMessage")
+const deleteNoteToastMessage = document.getElementById("deleteNoteToastMessage")
+const colorArray = ['#ccd5ae', '#e9edc9', '#faedcd', '#d4a373'];
 const closeBtns = document.querySelectorAll(".close");
+const notesCount = document.getElementById("notesSubHeading");
+const clearButtons = document.querySelectorAll(".clear-note-button");
+const checkBox = document.getElementById("checkBox")
+const checkBoxButtons = document.querySelectorAll(".check-box-button");
 let updateId = ""
 let deleteId = ""
 
 closeBtns.forEach(button => {
   button.addEventListener("click", () => {
-    document.getElementById("addNoteToastMessage").style.display = "none"
-    document.getElementById("updateNoteToastMessage").style.display = "none"
-    document.getElementById("deleteNoteToastMessage").style.display = "none"
+    addNoteToastMessage.style.display = "none"
+    updateNoteToastMessage.style.display = "none"
+    deleteNoteToastMessage.style.display = "none"
   })
 })
 
-document.querySelectorAll(".clear-note-button").forEach(button => {
+clearButtons.forEach(button => {
   button.addEventListener("click", () => {
     updateTaskHeading.value = taskHeading.value = updateTaskDetails.value = taskDetails.value = "";
   })
@@ -52,17 +59,20 @@ function closeUpdateForm() {
 
 function confirmDeleteTask(id) {
   deleteId = id
-  document.getElementById("checkBox").style.display = "flex"
+  checkBox.style.display = "flex"
 }
 
-function yesDeleteTask() {
-  deleteTask(deleteId)
-}
-
-function notDeleteTask() {
-  deleteId = ""
-  document.getElementById("checkBox").style.display = "none"
-}
+checkBoxButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    if (button.value === "YES") {
+      deleteTask(deleteId)
+    }
+    else if (button.value === "NO") {
+      deleteId = ""
+      checkBox.style.display = "none"
+    }
+  })
+})
 
 async function editTask(id, heading, details) {
   updateTaskDiv.style.display = "flex"
@@ -110,15 +120,16 @@ async function handleOnSubmitCreate(event) {
     const bodyDetails = {
       heading: taskHeading.value,
       details: taskDetails.value,
+      date: new Date().toLocaleString(),
     }
     await performBackendOperation("add_task", "POST", bodyDetails).then(() => {
       taskDetails.value = null;
       taskHeading.value = null;
       createTaskDiv.style.display = "none"
-      document.getElementById("addNoteToastMessage").style.display = "flex"
+      addNoteToastMessage.style.display = "flex"
       setTimeout(() => {
-        document.getElementById("addNoteToastMessage").style.display = "none"
-      }, 4000)
+        addNoteToastMessage.style.display = "none"
+      }, 3000)
       getTasks()
     })
   }
@@ -131,12 +142,13 @@ async function handleOnSubmitUpdate(event) {
       _id: updateId,
       heading: updateTaskHeading.value,
       details: updateTaskDetails.value,
+      date: new Date().toLocaleString(),
     }
     await performBackendOperation("modify_task", "PUT", bodyDetails).then(() => {
-      document.getElementById("updateNoteToastMessage").style.display = "flex"
+      updateNoteToastMessage.style.display = "flex"
       setTimeout(() => {
-        document.getElementById("updateNoteToastMessage").style.display = "none"
-      }, 4000)
+        updateNoteToastMessage.style.display = "none"
+      }, 3000)
     })
     updateTaskDiv.style.display = "none"
     getTasks()
@@ -153,12 +165,12 @@ async function getTasks() {
   }
   else {
     if (response.data.length > 0) {
-      document.getElementById("notesSubHeading").display = "block"
-      document.getElementById("notesSubHeading").innerHTML = `${response.data.length} Notes`
+      notesCount.display = "block"
+      notesCount.innerHTML = `${response.data.length} Notes`
     }
     else {
-      document.getElementById("notesSubHeading").display = "none"
-      document.getElementById("notesSubHeading").innerHTML = ""
+      notesCount.display = "none"
+      notesCount.innerHTML = ""
     }
     taskList.innerHTML = ""
     for (let i = 0; i < response.data.length; i++) {
@@ -171,6 +183,8 @@ async function getTasks() {
         <button onclick="editTask('${response.data[i]._id}', '${response.data[i].heading}', '${response.data[i].details}')" class="edit-button border-0 bg-transparent"><i class="fa-regular fa-pen-to-square"></i></button>
         <button onclick="confirmDeleteTask('${response.data[i]._id}')" class="delete-button border-0 bg-transparent"><i class="fa-solid fa-trash"></i></button>
       </div>
+      <hr>
+      <p class="last-updated-on">Updated on :${response.data[i].date}</p>
       </div>
       `
       taskList.innerHTML += task
@@ -181,13 +195,13 @@ async function getTasks() {
 getTasks()
 
 async function deleteTask(id) {
-  document.getElementById("checkBox").style.display = "none"
+  checkBox.style.display = "none"
   const bodyDetails = { _id: id }
   await performBackendOperation("delete_task", "DELETE", bodyDetails).then(() => {
-    document.getElementById("deleteNoteToastMessage").style.display = "flex"
+    deleteNoteToastMessage.style.display = "flex"
     setTimeout(() => {
-      document.getElementById("deleteNoteToastMessage").style.display = "none"
-    }, 4000)
+      deleteNoteToastMessage.style.display = "none"
+    }, 3000)
   })
   getTasks()
 }

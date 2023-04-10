@@ -10,3 +10,11 @@ mongoose.connect(
 );
 
 export const db = mongoose.connection;
+
+db.on("error", error => {
+  console.log('Error in MongoDb connection: ' + error)
+});
+
+db.once("open", function () {
+  console.log("Connected successfully");
+});
