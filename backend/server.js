@@ -1,4 +1,4 @@
-import express from "express"
+import express from "express";
 import cors from "cors";
 import * as routers from "./routes.js";
 import { database } from "./databaseConnection.js";
